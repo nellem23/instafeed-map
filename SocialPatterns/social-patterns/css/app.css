@@ -5,7 +5,25 @@ body,
         margin: 0px;
         padding: 0px
       }
-      #panel {
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-align: center;
+  float: center;
+  color: #53585F;
+  font-family: "Avenir Next", sans-serif !important;
+}
+
+html,
+body {
+  background-color: #F6F8FF;
+}
+
+/*#panel {
         position: absolute;
         top: 5px;
         left: 50%;
@@ -24,4 +42,4 @@ button, .button {
 button:hover, .button:hover; {
 	background-color: #1E61C8;
 	
-}
+}*/
