@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+<!-- Social Patterns - Instagram 
+
+Created by Nelle McDade for Parsons Javascrpipt Final
+
+Resources used:
+
+
+http://blog.thematicmapping.org/2014/06/showing-instagram-photos-and-videos-on.html
+
+http://blog.thematicmapping.org/2014/06/syncing-your-instagram-photos-to-cartodb.html
+
+https://github.com/ded/reqwest
+
+http://fancyapps.com/fancybox/#license
+
+https://github.com/turban/Leaflet.Instagram
+
+-->
+
+<html lang="en">
+<head>
+	<title>SocialPatterns</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta property="og:image" content="route.png" />
+	<link rel="stylesheet" href="lib/leaflet/leaflet.css" />
+	<link rel="stylesheet" href="lib/cluster/MarkerCluster.css" />		
+	<link rel="stylesheet" href="../dist/Leaflet.Instagram.css" />	
+	<link rel="stylesheet" href="css/map.css" />
+
+	<!-- fancy box links -->
+
+	<!-- Add jQuery library -->
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+	<!-- Add mousewheel plugin (this is optional) -->
+	<script type="text/javascript" src="fancybox/lib/jquery.mousewheel-3.0.6.pack.js"></script>
+
+	<!-- Add fancyBox -->
+	<!-- <link rel="stylesheet" href="fancybox/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+	<script type="text/javascript" src="fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+ -->
+	<!-- Optionally add helpers - button, thumbnail and/or media -->
+	<!-- <link rel="stylesheet" href="fancybox/source/helpers/jquery.fancybox-buttons.css?v=1.0.5" type="text/css" media="screen" />
+	<script type="text/javascript" src="fancybox/source/helpers/jquery.fancybox-buttons.js?v=1.0.5"></script>
+	<script type="text/javascript" src="fancybox/source/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
+ 
+	<link rel="stylesheet" href="fancybox/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" type="text/css" media="screen" />
+	<script type="text/javascript" src="fancybox/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+-->
+
+</head>
+<body>
+
+	<div class="row">
+	    <div class="large-12 columns">
+	      <!-- <div class="nav-bar right">
+	       <ul class="button-group">
+	         <li><a href="#" class="button">Link 1</a></li>
+	         <li><a href="#" class="button">Link 2</a></li>
+	         <li><a href="#" class="button">Link 3</a></li>
+	         <li><a href="#" class="button">Link 4</a></li>
+	        </ul>
+	      </div> -->
+	      <h1>SocialPatterns</h1>
+	      <hr/>
+	    </div>
+	  </div>
+
+	<div id="map"></div>
+	<script src="lib/reqwest.min.js"></script>
+	<script src="lib/leaflet/leaflet.js"></script>
+<!-- added -->
+	<script>
+		MB_ATTR = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+				'Imagery © <a href="http://mapbox.com">Mapbox</a>';
+
+		MB_URL = 'http://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png';
+
+		OSM_URL = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+		OSM_ATTRIB = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+	</script>
+
+
+	<script src="lib/cluster/leaflet.markercluster.js"></script>			
+	<script src="../dist/Leaflet.Instagram.Cluster.js"></script>		
+	<script>
+
+	var map = L.map('map').setView([40.71649, -74.00391], 10);
+
+	// var map = L.map('map', {
+	// 	maxZoom: 15,
+
+	// }).fitBounds([[40.71, 74.00], [40.71,74.00]]);
+
+
+	L.tileLayer(MB_URL, {attribution: MB_ATTR, id: 'examples.map-i875mjb7'}).addTo(map);
+
+// 	L.tileLayer('http://{s}.tiles.mapbox.com/v3/MapID/{z}/{x}/{y}.png', {
+//     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+//     maxZoom: 18
+// }).addTo(map);
+
+	// L.tileLayer('http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=norges_grunnkart&zoom={z}&x={x}&y={y}', {
+	// 	attribution: '&copy; <a href="http://kartverket.no/">Kartverket</a>'
+	// }).addTo(map);
+
+	// L.instagram.cluster('instagram_api_url_with_access_token').addTo(map);
+
+
+	L.instagram.cluster('https://api.instagram.com/v1/media/search?access_token=29487735.1fb234f.d77e940cc2ac4a74b22bccfdbe122958&lat=40.71649&lng=-74.00391&distance=5000').addTo(map); //&trending=trending
+
+
+	// add featureLayer
+
+	function onEachFeature(feature, layer) {
+    // does this feature have a property named popupContent?
+	    if (feature.properties && feature.properties.popupContent) {
+	        layer.bindPopup(feature.properties.popupContent);
+	    }
+	}
+
+	var geojsonFeature = {
+	    "type": "Feature",
+	    "properties": {
+	        "name": "Coors Field",
+	        "amenity": "Baseball Stadium",
+	        "popupContent": "This is where the Rockies play!"
+	    },
+	    "geometry": {
+	        "type": "Point",
+	        "coordinates": [-104.99404, 39.75621]
+	    }
+	};
+
+	L.geoJson(geojsonFeature, {
+	    onEachFeature: onEachFeature
+	}).addTo(map);
+
+//working 
+	// L.instagram.cluster('https://api.instagram.com/v1/media/popular?access_token=29487735.1fb234f.d77e940cc2ac4a74b22bccfdbe122958').addTo(map);
+
+	// L.instagram.cluster('http://turban.cartodb.com/api/v2/sql?q=SELECT * FROM instagram WHERE the_geom %26%26 ST_SetSRID(ST_MakeBox2D(ST_Point(5.727, 59.124), ST_Point(5.924, 59.305)), 4326)'
+	// ).addTo(map); 
+
+	</script>
+</body>
+</html>

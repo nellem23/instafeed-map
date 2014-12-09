@@ -1,0 +1,27 @@
+html, 
+body, 
+#map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+      #panel {
+        position: absolute;
+        top: 5px;
+        left: 50%;
+        margin-left: -180px;
+        z-index: 5;
+        padding: 5px;
+      }
+
+button, .button {
+	font-size: 0.75rem;
+	font-size: .8rem;
+	background-color: #4297F7;
+	border-color: none;
+}
+
+button:hover, .button:hover; {
+	background-color: #1E61C8;
+	
+}
